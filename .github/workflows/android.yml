@@ -53,10 +53,15 @@ jobs:
           echo "Android SDK: $ANDROID_HOME"
           ls -la "$ANDROID_HOME/build-tools" "$ANDROID_HOME/platforms" "$HOME/.android/debug.keystore"
           godot --headless --editor --path . --quit --verbose 2>&1 | tail -80
+      - name: Configure explicit debug keystore
+        run: |
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PATH=$HOME/.android/debug.keystore" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_USER=androiddebugkey" >> "$GITHUB_ENV"
+          echo "GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD=android" >> "$GITHUB_ENV"
       - name: Export debug APK
         run: |
           mkdir -p build
-          godot --headless --path . --export-debug Android build/LastSignal-debug.apk
+          godot --headless --verbose --path . --export-debug Android build/LastSignal-debug.apk
           test -s build/LastSignal-debug.apk
       - uses: actions/upload-artifact@v4
         with:
