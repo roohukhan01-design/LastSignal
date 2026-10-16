@@ -27,7 +27,7 @@ jobs:
           mv /tmp/android-tools/cmdline-tools "$ANDROID_HOME/cmdline-tools/latest"
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           yes | "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --licenses >/dev/null || true
-          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-34" "build-tools;34.0.0" "platforms;android-35" "build-tools;35.0.0"
       - uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.3.0
@@ -48,6 +48,11 @@ jobs:
           EOF
       - name: Import project
         run: godot --headless --editor --path . --quit
+      - name: Check Android export environment
+        run: |
+          echo "Android SDK: $ANDROID_HOME"
+          ls -la "$ANDROID_HOME/build-tools" "$ANDROID_HOME/platforms" "$HOME/.android/debug.keystore"
+          godot --headless --editor --path . --quit --verbose 2>&1 | tail -80
       - name: Export debug APK
         run: |
           mkdir -p build
