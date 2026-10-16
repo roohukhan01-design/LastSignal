@@ -15,7 +15,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      # GitHub Ubuntu runners already provide the Android SDK and sdkmanager.
       - name: Install Android SDK components
         run: |
           yes | sdkmanager --licenses > /dev/null || true
